@@ -1,11 +1,9 @@
 public class Guest {
-    // Атрибуты (данные о госте)
-    private String firstName;    // имя
-    private String lastName;     // фамилия
-    private String phoneNumber;  // телефон
-    private String email;        // email
+    private String firstName;
+    private String lastName;
+    private String phoneNumber;
+    private String email;
 
-    // Конструктор - создаёт нового гостя
     public Guest(String firstName, String lastName, String phoneNumber, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -13,7 +11,6 @@ public class Guest {
         this.email = email;
     }
 
-    // Геттеры - получить информацию
     public String getFirstName() {
         return firstName;
     }
@@ -30,7 +27,6 @@ public class Guest {
         return email;
     }
 
-    // Сеттеры - изменить информацию
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
@@ -39,7 +35,6 @@ public class Guest {
         this.email = email;
     }
 
-    // Метод для вывода информации о госте
     public void displayInfo() {
         System.out.println("Гость: " + firstName + " " + lastName);
         System.out.println("Телефон: " + phoneNumber);

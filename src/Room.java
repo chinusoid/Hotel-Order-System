@@ -1,19 +1,16 @@
 public class Room {
-    // Атрибуты
-    private int roomNumber;      // номер комнаты
-    private String roomType;     // тип (одноместный, двухместный, люкс)
-    private double pricePerNight; // цена за ночь
-    private boolean isAvailable; // свободен ли номер
+    private int roomNumber;
+    private String roomType;
+    private double pricePerNight;
+    private boolean isAvailable;
 
-    // Конструктор
     public Room(int roomNumber, String roomType, double pricePerNight) {
         this.roomNumber = roomNumber;
         this.roomType = roomType;
         this.pricePerNight = pricePerNight;
-        this.isAvailable = true; // по умолчанию номер свободен
+        this.isAvailable = true;
     }
 
-    // Геттеры
     public int getRoomNumber() {
         return roomNumber;
     }
@@ -30,12 +27,10 @@ public class Room {
         return isAvailable;
     }
 
-    // Сеттеры
     public void setPricePerNight(double pricePerNight) {
         this.pricePerNight = pricePerNight;
     }
 
-    // Методы для бронирования и освобождения номера
     public void bookRoom() {
         if (isAvailable) {
             isAvailable = false;
@@ -50,7 +45,6 @@ public class Room {
         System.out.println("Номер " + roomNumber + " освобождён");
     }
 
-    // Метод для вывода информации о номере
     public void displayInfo() {
         System.out.println("Номер: " + roomNumber);
         System.out.println("Тип: " + roomType);

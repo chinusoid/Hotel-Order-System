@@ -2,7 +2,6 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("=== СИСТЕМА БРОНИРОВАНИЯ ОТЕЛЯ ===\n");
 
-        // Создаём гостей
         Guest guest1 = new Guest("Айдар", "Нурланов", "+7 777 123 4567", "aidar@gmail.com");
         Guest guest2 = new Guest("Асель", "Жумабекова", "+7 777 987 6543", "asel@mail.ru");
 
@@ -12,7 +11,6 @@ public class Main {
         guest2.displayInfo();
         System.out.println("\n");
 
-        // Создаём номера
         Room room1 = new Room(101, "Одноместный", 15000);
         Room room2 = new Room(202, "Двухместный", 25000);
         Room room3 = new Room(305, "Люкс", 50000);
@@ -25,22 +23,18 @@ public class Main {
         room3.displayInfo();
         System.out.println("\n");
 
-        // Создаём бронирования
         Booking booking1 = new Booking(guest1, room1, 3);
         Booking booking2 = new Booking(guest2, room3, 2);
 
-        // Бронируем номера
         room1.bookRoom();
         room3.bookRoom();
         System.out.println();
 
-        // Выводим информацию о бронированиях
         booking1.displayBookingInfo();
         System.out.println();
         booking2.displayBookingInfo();
         System.out.println();
 
-        // Сравниваем объекты
         System.out.println("=== СРАВНЕНИЕ НОМЕРОВ ===");
         if (room1.getPricePerNight() < room2.getPricePerNight()) {
             System.out.println("Номер " + room1.getRoomNumber() + " дешевле, чем номер " + room2.getRoomNumber());

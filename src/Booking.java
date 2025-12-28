@@ -1,11 +1,9 @@
 public class Booking {
-    // Атрибуты
-    private Guest guest;         // гость
-    private Room room;           // номер
-    private int numberOfNights;  // количество ночей
-    private double totalPrice;   // общая стоимость
+    private Guest guest;
+    private Room room;
+    private int numberOfNights;
+    private double totalPrice;
 
-    // Конструктор
     public Booking(Guest guest, Room room, int numberOfNights) {
         this.guest = guest;
         this.room = room;
@@ -13,7 +11,6 @@ public class Booking {
         this.totalPrice = room.getPricePerNight() * numberOfNights;
     }
 
-    // Геттеры
     public Guest getGuest() {
         return guest;
     }
@@ -30,7 +27,6 @@ public class Booking {
         return totalPrice;
     }
 
-    // Метод для вывода информации о бронировании
     public void displayBookingInfo() {
         System.out.println("=== ИНФОРМАЦИЯ О БРОНИРОВАНИИ ===");
         System.out.println("Гость: " + guest.getFirstName() + " " + guest.getLastName());
