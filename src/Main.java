@@ -11,11 +11,13 @@ public class Main {
         guest2.displayInfo();
         System.out.println("\n");
 
-        Room room1 = new Room(101, "Одноместный", 15000);
-        Room room2 = new Room(202, "Двухместный", 25000);
-        Room room3 = new Room(305, "Люкс", 50000);
+        Room room1 = new StandardRoom(101, 15000, 1);
+        Room room2 = new StandardRoom(202, 25000, 2);
+        Room room3 = new LuxuryRoom(305, 50000, true, true, true);
 
-        System.out.println("Доступные номера:");
+        System.out.println("=== ДЕМОНСТРАЦИЯ ПОЛИМОРФИЗМА ===");
+        System.out.println("Доступные номера:\n");
+
         room1.displayInfo();
         System.out.println();
         room2.displayInfo();
