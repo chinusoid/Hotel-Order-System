@@ -8,7 +8,7 @@ public class GuestDAO {
         String sql = "INSERT INTO guests (first_name, last_name, phone_number, email) VALUES (?, ?, ?, ?)";
 
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             pstmt.setString(1, guest.getFirstName());
             pstmt.setString(2, guest.getLastName());
@@ -16,6 +16,13 @@ public class GuestDAO {
             pstmt.setString(4, guest.getEmail());
 
             pstmt.executeUpdate();
+
+            // Получаем сгенерированный ID
+            ResultSet rs = pstmt.getGeneratedKeys();
+            if (rs.next()) {
+                guest.setId(rs.getInt(1));
+            }
+
             System.out.println("Гость добавлен в базу данных: " + guest.getFirstName() + " " + guest.getLastName());
 
         } catch (SQLException e) {
@@ -23,21 +30,75 @@ public class GuestDAO {
         }
     }
 
+    public boolean guestExists(String email) {
+        String sql = "SELECT COUNT(*) FROM guests WHERE email = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, email);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Ошибка проверки существования гостя: " + e.getMessage());
+        }
+
+        return false;
+    }
+
+    public void addOrUpdateGuest(Guest guest) {
+        if (guestExists(guest.getEmail())) {
+            // Обновляем существующего
+            String sql = "UPDATE guests SET first_name = ?, last_name = ?, phone_number = ? WHERE email = ?";
+
+            try (Connection conn = DatabaseConnection.getConnection();
+                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+                pstmt.setString(1, guest.getFirstName());
+                pstmt.setString(2, guest.getLastName());
+                pstmt.setString(3, guest.getPhoneNumber());
+                pstmt.setString(4, guest.getEmail());
+
+                pstmt.executeUpdate();
+
+                // Получаем ID обновлённого гостя
+                String getIdSql = "SELECT id FROM guests WHERE email = ?";
+                PreparedStatement getIdStmt = conn.prepareStatement(getIdSql);
+                getIdStmt.setString(1, guest.getEmail());
+                ResultSet rs = getIdStmt.executeQuery();
+                if (rs.next()) {
+                    guest.setId(rs.getInt(1));
+                }
+
+                System.out.println("Гость обновлён в БД: " + guest.getFirstName() + " " + guest.getLastName());
+
+            } catch (SQLException e) {
+                System.out.println("Ошибка при обновлении гостя: " + e.getMessage());
+            }
+        } else {
+            // Добавляем нового
+            addGuest(guest);
+        }
+    }
     public List<Guest> getAllGuests() {
         List<Guest> guests = new ArrayList<>();
-        String sql = "SELECT * FROM guests";
+        String sql = "SELECT * FROM guests ORDER BY id";
 
         try (Connection conn = DatabaseConnection.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
-                String firstName = rs.getString("first_name");
-                String lastName = rs.getString("last_name");
-                String phone = rs.getString("phone_number");
-                String email = rs.getString("email");
-
-                Guest guest = new Guest(firstName, lastName, phone, email);
+                Guest guest = new Guest();
+                guest.setId(rs.getInt("id"));
+                guest.setFirstName(rs.getString("first_name"));
+                guest.setLastName(rs.getString("last_name"));
+                guest.setPhoneNumber(rs.getString("phone_number"));
+                guest.setEmail(rs.getString("email"));
                 guests.add(guest);
             }
 
@@ -46,6 +107,32 @@ public class GuestDAO {
         }
 
         return guests;
+    }
+
+    public Guest getGuestById(int id) {
+        String sql = "SELECT * FROM guests WHERE id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                Guest guest = new Guest();
+                guest.setId(rs.getInt("id"));
+                guest.setFirstName(rs.getString("first_name"));
+                guest.setLastName(rs.getString("last_name"));
+                guest.setPhoneNumber(rs.getString("phone_number"));
+                guest.setEmail(rs.getString("email"));
+                return guest;
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Ошибка при поиске гостя: " + e.getMessage());
+        }
+
+        return null;
     }
 
     public void updateGuestPhone(String email, String newPhone) {
@@ -86,6 +173,20 @@ public class GuestDAO {
 
         } catch (SQLException e) {
             System.out.println("Ошибка при удалении гостя: " + e.getMessage());
+        }
+    }
+
+    public void deleteAllGuests() {
+        String sql = "DELETE FROM guests";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             Statement stmt = conn.createStatement()) {
+
+            stmt.executeUpdate(sql);
+            System.out.println("Все гости удалены из БД");
+
+        } catch (SQLException e) {
+            System.out.println("Ошибка при удалении всех гостей: " + e.getMessage());
         }
     }
 }

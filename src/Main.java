@@ -7,22 +7,24 @@ public class Main {
         GuestDAO guestDAO = new GuestDAO();
         RoomDAO roomDAO = new RoomDAO();
 
-        System.out.println("=== ДЕМОНСТРАЦИЯ CREATE (INSERT) ===\n");
+        System.out.println("=== ДОБАВЛЕНИЕ/ОБНОВЛЕНИЕ ДАННЫХ ===\n");
 
-        Guest guest1 = new Guest("Айдар", "Нурланов", "+7 777 123 4567", "aidar@gmail.com");
-        Guest guest2 = new Guest("Асель", "Жумабекова", "+7 777 987 6543", "asel@mail.ru");
+        Guest guest1 = new Guest("Марат", "Нурланов", "+7 777 123 4567", "aidar@gmail.com");
+        Guest guest2 = new Guest("БОта", "Жумабекова", "+7 777 987 6543", "asel@mail.ru");
+        Guest guest3 = new Guest("Тем", "Жумабекова", "+7 777 987 6543", "asel@mail.ru");
 
-        guestDAO.addGuest(guest1);
-        guestDAO.addGuest(guest2);
+        guestDAO.addOrUpdateGuest(guest1);
+        guestDAO.addOrUpdateGuest(guest2);
+        guestDAO.addOrUpdateGuest(guest3);
         System.out.println();
 
         Room room1 = new StandardRoom(101, 15000, 1);
         Room room2 = new StandardRoom(202, 25000, 2);
         Room room3 = new LuxuryRoom(305, 50000, true, true, true);
 
-        roomDAO.addRoom(room1);
-        roomDAO.addRoom(room2);
-        roomDAO.addRoom(room3);
+        roomDAO.addOrUpdateRoom(room1);
+        roomDAO.addOrUpdateRoom(room2);
+        roomDAO.addOrUpdateRoom(room3);
         System.out.println();
 
         System.out.println("=== ДЕМОНСТРАЦИЯ READ (SELECT) ===\n");
@@ -49,9 +51,9 @@ public class Main {
 
         System.out.println("=== ДЕМОНСТРАЦИЯ DELETE ===\n");
 
-        guestDAO.deleteGuest("asel@mail.ru");
-        roomDAO.deleteRoom(202);
-        System.out.println();
+       // guestDAO.deleteGuest("asel@mail.ru");
+       // roomDAO.deleteRoom(202);
+       // System.out.println();
 
         System.out.println("=== ФИНАЛЬНОЕ СОСТОЯНИЕ БД ===\n");
 
